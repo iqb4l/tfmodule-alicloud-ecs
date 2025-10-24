@@ -34,30 +34,8 @@ variable "system_disk_size" {
 }
 
 variable "security_group_ids" {
-  type        = list(string)
-  description = "List of security group IDs (if not provided, creates new one)"
-  default     = null
-}
-
-variable "security_group_rules" {
-  type = list(object({
-    type        = string
-    ip_protocol = string
-    port_range  = string
-    cidr_ip     = optional(string)
-    nic_type    = optional(string)
-    policy      = optional(string)
-    priority    = optional(number)
-    description = optional(string)
-  }))
-  description = "Security group rules if creating new security group"
-  default     = []
-}
-
-variable "security_group_description" {
   type        = string
-  description = "Description for the security group"
-  default     = ""
+  description = "security group IDs "
 }
 
 variable "internet_max_bandwidth_out" {

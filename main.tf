@@ -1,29 +1,3 @@
-# Create Security Group if rules are provided
-resource "alicloud_security_group" "ecs_sg" {
-  count               = length(var.security_group_rules) > 0 ? 1 : 0
-  vpc_id              = var.vpc_id
-  security_group_name = "${var.instance_name}-sg"
-  description         = var.security_group_description
-}
-
-# Create Security Group Rules
-resource "alicloud_security_group_rule" "rules" {
-  for_each = { 
-    for idx, rule in var.security_group_rules : 
-    "${rule.type}-${rule.ip_protocol}-${idx}" => rule 
-  }
-  
-  type              = each.value.type
-  ip_protocol       = lookup(each.value, "ip_protocol", "tcp")
-  nic_type          = lookup(each.value, "nic_type", "intranet")
-  policy            = lookup(each.value, "policy", "accept")
-  port_range        = each.value.port_range
-  priority          = lookup(each.value, "priority", 1)
-  security_group_id = alicloud_security_group.ecs_sg[0].id
-  cidr_ip           = lookup(each.value, "cidr_ip", null)
-  description       = lookup(each.value, "description", "")
-}
-
 # Create ECS Instance
 resource "alicloud_instance" "instance" {
   instance_name              = var.instance_name
@@ -32,7 +6,7 @@ resource "alicloud_instance" "instance" {
   system_disk_category       = var.system_disk_category
   system_disk_size           = var.system_disk_size
   vswitch_id                 = var.vswitch_id
-  security_groups            = var.security_group_ids != null ? var.security_group_ids : [alicloud_security_group.ecs_sg[0].id]
+  security_groups            = var.security_group_ids
   internet_max_bandwidth_out = var.internet_max_bandwidth_out
   password                   = var.password
   key_name                   = var.key_name
