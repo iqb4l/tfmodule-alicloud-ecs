@@ -29,7 +29,7 @@ variable "system_disk_size" {
 }
 
 variable "security_group_ids" {
-  type        = string
+  type        = list(string)
   description = "security group IDs "
 }
 
