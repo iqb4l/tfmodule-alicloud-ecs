@@ -13,11 +13,6 @@ variable "image_id" {
   description = "Image ID for the instance"
 }
 
-variable "vpc_id" {
-  type        = string
-  description = "VPC ID"
-}
-
 variable "vswitch_id" {
   type        = string
   description = "VSwitch ID"
